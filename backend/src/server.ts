@@ -7,7 +7,11 @@ import corsConfig from './config/cors.config';
 // Construct a schema, using GraphQL schema language
 const schema = buildSchema(`
   type Query {
-    hello: String
+    hello: String!
+    helloArg(name: String): String
+
+    weight: Float
+    hobbies: [String!]!
   }
 `);
 
@@ -16,6 +20,11 @@ const root = {
   hello() {
     return 'Hello world123!';
   },
+  helloArg: (args: any) => {
+    return `Hello ${args.name}`;
+  },
+  weight: null,
+  hobbies: () => ['123', '123', 'no null value'],
 };
 
 const app = express();
@@ -30,10 +39,17 @@ app.all(
   })
 );
 
-// const fetcher = createGraphiQLFetcher({ url: 'https://my.backend/graphql' });
-
 // Start the server at port
 app.listen(4000);
 console.log('Running a GraphQL API server at http://localhost:4000/graphql');
 //test:
 // http://localhost:4000/graphql/?query={hello}
+//Queries:
+/**
+ * query MyFirstQuery {
+  hello
+  helloArg(name:"Igor")
+  weight
+  hobbies
+}
+ */
