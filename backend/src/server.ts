@@ -1,32 +1,39 @@
 import express from 'express';
 import { createHandler } from 'graphql-http/lib/use/express';
 import { buildSchema } from 'graphql';
+import cors from 'cors';
+import corsConfig from './config/cors.config';
 
 // Construct a schema, using GraphQL schema language
-var schema = buildSchema(`
+const schema = buildSchema(`
   type Query {
     hello: String
   }
 `);
 
 // The root provides a resolver function for each API endpoint
-var root = {
+const root = {
   hello() {
-    return 'Hello world!';
+    return 'Hello world123!';
   },
 };
 
-var app = express();
+const app = express();
+app.use(cors(corsConfig));
 
 // Create and use the GraphQL handler.
 app.all(
   '/graphql',
   createHandler({
-    schema: schema,
+    schema,
     rootValue: root,
   })
 );
 
+// const fetcher = createGraphiQLFetcher({ url: 'https://my.backend/graphql' });
+
 // Start the server at port
 app.listen(4000);
 console.log('Running a GraphQL API server at http://localhost:4000/graphql');
+//test:
+// http://localhost:4000/graphql/?query={hello}
