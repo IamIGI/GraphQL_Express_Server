@@ -1,7 +1,3 @@
-import { createSchema } from 'graphql-yoga';
+import userGraphqlModel from './models/user.graphql.model';
 
-export const typeDefinitions = /* GraphQL */ `
-  type Query {
-    hello: String!
-  }
-`;
+export const typeDefinitions = [userGraphqlModel.typeDef];

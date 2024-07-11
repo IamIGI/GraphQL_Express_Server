@@ -1,5 +1,4 @@
-export const resolvers = {
-  Query: {
-    hello: () => 'Hello World from Yoga123!',
-  },
-};
+import { merge } from 'lodash';
+import userGraphqlModel from './models/user.graphql.model';
+
+export const resolvers = merge(userGraphqlModel.resolvers);
