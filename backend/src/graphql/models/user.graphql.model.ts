@@ -1,48 +1,63 @@
-type CreateUser = {
-  user: {
-    name: string;
-    age: number;
-  };
+import userService from '../../services/user.service';
+import { Context } from '../context';
+
+export type UserCreateInput = {
+  name: string;
+  email: string;
+  password: string;
 };
 
 const typeDef = /* GraphQL */ `
   # Query - Read operation
   type Query {
-    user: User
+    allUsers: [User!]!
+    userById(id: String): User
   }
 
   #Mutations  - CUD operations
   type Mutation {
-    createUser(user: NewUserInput!): User
+    createUser(data: NewUserInput!): User
   }
 
   input NewUserInput {
     name: String!
-    age: Int
+    email: String!
+    password: String!
   }
 
   type User {
-    id: Int
+    id: String
+    createdAt: String
+    updatedAt: String
+
     name: String
-    age: Int
+    email: String
+    password: String
+    status: String
   }
 `;
 
 const resolvers = {
   Query: {
-    user: () => {
-      return {
-        id: 1,
-        name: 'Igor',
-      };
+    allUsers: (_parent: undefined, _args: undefined, context: Context) => {
+      return userService.getAllUser(context.prisma);
+    },
+    userById: (_parent: undefined, args: { id: string }, context: Context) => {
+      const { id } = args;
+      return userService.getUserById(context.prisma, id);
     },
   },
+  //TODO: Done next
   Mutation: {
-    createUser: (_: null, { user }: CreateUser) => {
-      return { id: 1, ...user };
+    createUser: async (
+      _parent: undefined,
+      args: { data: UserCreateInput },
+      context: Context
+    ) => {
+      return userService.createUser(context.prisma, args.data);
     },
   },
-  //When type user, return field name with UpperCase
+  // When type user, return field name with UpperCase
   User: {
     name: (obj: { name: string }) => obj.name.trim().toUpperCase(),
   },
