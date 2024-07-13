@@ -1,7 +1,7 @@
 import userService from '../../services/user.service';
 import { Context } from '../context';
 
-export type UserCreateInput = {
+export type UserInput = {
   name: string;
   email: string;
   password: string;
@@ -17,6 +17,8 @@ const typeDef = /* GraphQL */ `
   #Mutations  - CUD operations
   type Mutation {
     createUser(data: NewUserInput!): User
+    deleteUser(id: String): User
+    updateUser(id: String, data: NewUserInput!): User
   }
 
   input NewUserInput {
@@ -51,13 +53,28 @@ const resolvers = {
   Mutation: {
     createUser: async (
       _parent: undefined,
-      args: { data: UserCreateInput },
+      args: { data: UserInput },
       context: Context
     ) => {
       return userService.createUser(context.prisma, args.data);
     },
+    deleteUser: async (
+      _parent: undefined,
+      args: { id: string },
+      context: Context
+    ) => {
+      return userService.deleteUser(context.prisma, args.id);
+    },
+    updateUser: async (
+      _parent: undefined,
+      args: { id: string; data: UserInput },
+      context: Context
+    ) => {
+      const { id, data } = args;
+      return userService.updateUser(context.prisma, id, data);
+    },
   },
-  // When type user, return field name with UpperCase
+  //Modify returned fields when called from given types
   User: {
     name: (obj: { name: string }) => obj.name.trim().toUpperCase(),
   },
