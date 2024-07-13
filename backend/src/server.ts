@@ -49,12 +49,45 @@ startServer();
 //--------------------------
 //test:
 // http://localhost:4000/graphql/?query={hello}
-//Queries:
-/**
- * query MyFirstQuery {
-  hello
-  helloArg(name:"Igor")
-  weight
-  hobbies
-}
- */
+
+// # query getUserById($id: String!) {
+//   #   userById(id: $id) {
+//   #     id
+//   #     name
+//   #     email
+//   #     createdAt
+//   #   }
+//   # }
+
+//   # query getAllUsers {
+//   #     allUsers {
+//   #       id
+//   #       name
+//   #       email
+//   #       password
+//   #     }
+//   # }
+
+//   # mutation MutationQueryCreate($user: NewUserInput!) {
+//   # 	createUser(data: $user) {
+//   # 	  id
+//   #     name
+//   #   	email
+//   #     createdAt
+//   # 	}
+//   # }
+
+//   mutation MutationQueryUpdate($id: String!, $user: NewUserInput!) {
+//     updateUser(id: $id, data: $user) {
+//       id
+//       name
+//       email
+//       password
+//     }
+//   }
+
+//   # mutation MutationQueryDelete($id: String!) {
+//   # 	deleteUser(id: $id) {
+//   # id
+//   # 	}
+//   # }
